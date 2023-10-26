@@ -1,22 +1,18 @@
 <?php
 require('connect.php');
 
-if(isset($_GET['is-valid']) && isset($_GET['value'])){
-    isValid($_GET['value']);
-    header('Location: /index.php');
-}else{
+
     $name = $_POST['name'];
     isValid($name);
-}
 
 function isValid(string $s): bool {
     $sClear = ClearString($s);
     $sLength = strlen($sClear);
 
-    if($sClear == ''){
-        WriteBD('false', $s);
+    if ($sLength % 2 !== 0 || $sClear == '') {
+        WriteBD(0, $s);
         return false;
-    }
+    };
 
     $bracketSet = ['(' => ')', '[' => ']', '{' => '}', '<' => '>'];
     $bracketStack = [];
@@ -25,12 +21,16 @@ function isValid(string $s): bool {
         if (array_key_exists($sClear[$i], $bracketSet)) {
             $bracketStack[] = $bracketSet[$sClear[$i]];
         } elseif (array_pop($bracketStack) !== $sClear[$i]) {
-            WriteBD('false', $s);
+            WriteBD(0, $s);
             return false;
         }
     }
-    WriteBD('true', $s);
-    return count($bracketStack) === 0;
+    if(count($bracketStack) === 0){
+        WriteBD(1, $s);
+    }else{
+        WriteBD(0, $s);
+        return false;
+    }
 }
 
 function ClearString($s): string{
