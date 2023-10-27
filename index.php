@@ -73,10 +73,12 @@ require('connect.php');
                 },
                 success: function(data) {
                     $('#name').val('');
+                    $('#resultTable').html(data);
                     $('#success-alert').removeClass('d-none');
                     setTimeout(function() {
                         $('#success-alert').addClass('d-none');
                     }, 3000);
+
                 }
             });
 

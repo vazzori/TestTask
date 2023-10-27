@@ -31,6 +31,7 @@ function isValid(string $s, $brackets)
         WriteBD(0, $s);
         return false;
     }
+
 }
 
 function ClearString($s, $brackets): string
@@ -53,5 +54,25 @@ function WriteBD($result, $initialLine){
     global $pdo;
     $sth = $pdo->prepare("INSERT INTO `results` SET `result` = :result, `time` = :time, `initialLine` = :initialLine ");
     $sth->execute(array('result' => $result, 'time' => date("Y-m-d H:i:s"), 'initialLine' => $initialLine));
+    echo addData();
+}
+
+function addData() {
+    global $pdo;
+    $sth = $pdo->prepare("SELECT * FROM `results` ORDER BY `time`");
+    $sth->execute();
+    $list = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+    $html = '';
+    foreach ($list as $row) {
+        $html .= '<tr>';
+        $html .= '<th scope="row">' . $row['id'] . '</th>';
+        $html .= '<td>' . ($row['result'] ? 'Верное выражение' : 'Неверное выражение') . '</td>';
+        $html .= '<td>' . htmlspecialchars($row['initialLine'], ENT_QUOTES, 'UTF-8') . '</td>';
+        $html .= '<td>' . $row['time'] . '</td>';
+        $html .= '</tr>';
+    }
+
+    return $html;
 }
 
