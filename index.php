@@ -42,7 +42,7 @@ require('connect.php');
         </thead>
         <tbody id="resultTable">
         <?php
-        $sth = $pdo->prepare("SELECT * FROM `results` ORDER BY `time`");
+        $sth = $pdo->prepare("SELECT * FROM `results` ORDER BY `time` DESC ");
         $sth->execute();
         $list = $sth->fetchAll(PDO::FETCH_ASSOC);
         foreach ($list as $row): ?>
