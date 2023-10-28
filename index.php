@@ -41,20 +41,7 @@ require('connect.php');
         </tr>
         </thead>
         <tbody id="resultTable">
-        <?php
-        $sth = $pdo->prepare("SELECT * FROM `results` ORDER BY `time` DESC ");
-        $sth->execute();
-        $list = $sth->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($list as $row): ?>
-        <tr>
-            <th scope="row"><?php echo $row['id'] ?></th>
-            <td><?php
-                echo ($row['result'])? 'Верное выражение' : 'Неверное выражение';
-                ?></td>
-            <td><?php echo htmlspecialchars($row['initialLine'], ENT_QUOTES, 'UTF-8'); ?></td>
-            <td><?php echo $row['time']; ?></td>
-        </tr>
-        <?php endforeach; ?>
+
         </tbody>
     </table>
 </div>
@@ -81,7 +68,16 @@ require('connect.php');
 
                 }
             });
-
+        });
+        $.ajax({
+            url: "script.php",
+            type: "post",
+            data: {
+                "getHTML": true
+            },
+            success: function(data) {
+                $('#resultTable').html(data);
+            }
         });
     });
 </script>

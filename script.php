@@ -1,10 +1,14 @@
 <?php
-global $htmlTable;
 require('connect.php');
 
 $bracketSet = ['(' => ')', '[' => ']', '{' => '}', '<' => '>'];
-$name = $_POST['name'];
 
+if (isset($_POST['getHTML'])) {
+    $htmlTable = GenHTML(GetData());
+    echo $htmlTable;
+}
+
+$name = $_POST['name'];
 if(isValid($name, $bracketSet)){
     WriteBD(1, $name);
 } else {
